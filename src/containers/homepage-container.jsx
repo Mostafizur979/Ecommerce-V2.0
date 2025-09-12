@@ -5,12 +5,10 @@ import Link from "next/link"
 import { BiSolidCommentError } from "react-icons/bi"
 import { IoSettingsSharp } from "react-icons/io5"
 import { MdHome, MdLaptopChromebook } from "react-icons/md"
-import getCategories from "@/lib/getAllCategories"
-import getProducts from "@/lib/getAllProducts"
-import { useState, useEffect } from "react"
 import { IMAGE_PATH } from "@/assets"
 import Loader from "@/components/custom/custome-loader"
 import ProductSection from "@/components/common/ProductSection"
+import { useCategories, useProducts } from "@/hooks/useEcommerce"
 const HeroSectionCardData = [
     { title: "Laptop Finder", description: "Find your laptop easily", icon: <MdLaptopChromebook /> },
     { title: "Raise a Complain", description: "Share your experience", icon: <BiSolidCommentError /> },
@@ -57,23 +55,12 @@ const othersInfo = [
 ];
 
 export default function HomepageContainer() {
-    const [categories, setCategories] = useState(null)
-    const [products, setProducts] = useState(null)
-
-    async function fetchData() {
-        const data = await getCategories();
-        const productData = await getProducts()
-        setCategories(data);
-        setProducts(productData);
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
+    const { products, loading: productsLoading, error: productsError } = useProducts();
+    const { categories, loading: categoriesLoading, error: categoriesError } = useCategories();
 
     return (
         <>
-            <div className="max-w-[1350px] px-3 2xl:px-0 mx-auto">
+            <div>
                 <Banner />
                 <div className="w-full bg-white text-[#444444] text-[14px] rounded-2xl shadow-sm overflow-hidden p-2 my-5">
                     <div className="animate-marquee whitespace-nowrap">
@@ -107,7 +94,7 @@ export default function HomepageContainer() {
                                     <div className="p-[15px]">
                                         <div className="relative h-[30px] w-[30px] xl:h-[48px] xl:w-[48px]">
                                             <Image
-                                                src={data.Image == "no-image" ? IMAGE_PATH.no_image : `data:image/png;base64,${data?.Image}`}
+                                                src={data.image == "no-image" ? IMAGE_PATH.no_image : `data:image/png;base64,${data?.image}`}
                                                 fill
                                                 className='object-fit'
                                                 alt="category-image"
@@ -117,10 +104,10 @@ export default function HomepageContainer() {
                                     </div>
                                     <p className="w-full text-[13px] xl:text-[16px] text-[#01123D] text-center px-[10px] truncate">{data.name}</p>
                                 </Link>
-                            )) : 
+                            )) :
                             <div className="col-span-8">
                                 <Loader />
-                            </div> 
+                            </div>
                         }
                     </div>
                 </div>
@@ -134,8 +121,8 @@ export default function HomepageContainer() {
                         {
                             products ? <ProductSection
                                 products={products}
-                            /> : 
-                            <Loader />
+                            /> :
+                                <Loader />
                         }
                     </div>
                 </div>
