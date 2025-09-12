@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-// 🛒 Products Hook
+// Products Hook
 export function useProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,7 +26,33 @@ export function useProducts() {
   return { products, loading, error };
 }
 
-// 🏷️ Categories Hook
+// Single Product Hook
+export function useProductDetails(id) {
+  const [product, setProduct] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product/${id}/`);
+        if (!res.ok) throw new Error("Failed to fetch products");
+        const data = await res.json();
+        setProduct(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  return { product, loading, error };
+}
+
+// Categories Hook
 export function useCategories() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
