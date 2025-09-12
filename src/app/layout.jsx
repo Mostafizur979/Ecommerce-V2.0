@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
         <div className="relative flex flex-col min-h-screen bg-[#F2F4F8] " >
         <div className="flex-grow overflow-y-auto">
           <NavBar />
-          <div className="max-w-[1350px] min-h-[100vh] px-3 2xl:px-0 mx-auto">
+          <div>
             {children}
           </div>
           <Footer />

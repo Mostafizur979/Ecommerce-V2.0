@@ -12,7 +12,32 @@ import "swiper/css/thumbs";
 
 export default function ProductViewSection({ product }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
-
+  const keyProductData = [
+    {
+      key: 'Price',
+      value: product?.price - product?.discount,
+    },
+    {
+      key: 'Regular Price',
+      value: product?.price
+    },
+    {
+      key: 'Status',
+      value: "In Stock"
+    },
+    {
+      key: 'Product Code',
+      value: product?.id
+    },
+    {
+      key: 'Category',
+      value: product?.categoryName
+    },
+    {
+      key: 'Sub Category',
+      value: product?.subCategoryName
+    }
+  ]
   return (
     <div className="grid grid-cols-1 xl:grid-cols-3">
       <div className="relative h-[400px] w-[400px]">
@@ -75,6 +100,24 @@ export default function ProductViewSection({ product }) {
             </SwiperSlide>
           ))}
         </Swiper>
+      </div>
+      <div className="col-span-2">
+        <div>
+          <h2 className="text-[20px] xl:text-[22px] text-[#3739BB]">{product?.name}</h2>
+          <div className="flex gap-2 flex-wrap mt-2">
+            {
+              keyProductData?.map((data,idx)=>(
+                <div key={idx} className="bg-gray-200 text-[14px] px-2 py-1 rounded-full">
+                  <span className="text-[#666666]">{data?.key}: </span>
+                  <span className="text-black">{data?.value} </span>
+                </div>
+              ))
+            }
+          </div>
+          <div className="mt-2">
+
+          </div>
+        </div>
       </div>
     </div>
   );

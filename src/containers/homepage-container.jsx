@@ -60,7 +60,7 @@ export default function HomepageContainer() {
 
     return (
         <>
-            <div>
+            <div className="max-w-[1350px] min-h-[100vh] px-3 2xl:px-0 mx-auto">
                 <Banner />
                 <div className="w-full bg-white text-[#444444] text-[14px] rounded-2xl shadow-sm overflow-hidden p-2 my-5">
                     <div className="animate-marquee whitespace-nowrap">
@@ -88,7 +88,7 @@ export default function HomepageContainer() {
                         <p className="text-[14px] lg:text-[15px] text-[#01132D] text-center">Get Your Desired Product from Featured Category!</p>
                     </div>
                     <div className="grid grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-3 mt-8">
-                        {categories ?
+                        {categories?
                             categories?.map((data, idx) => (
                                 <Link href={{ pathname: "/category", query: { cid: data?.id } }} key={data?.id} className="flex flex-col items-center bg-white rounded-xl shadow-md py-[15px] cursor-pointer">
                                     <div className="p-[15px]">
@@ -119,7 +119,7 @@ export default function HomepageContainer() {
                     </div>
                     <div className="mt-8">
                         {
-                            products ? <ProductSection
+                           products ? <ProductSection
                                 products={products}
                             /> :
                                 <Loader />
