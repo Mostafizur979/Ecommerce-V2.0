@@ -6,5 +6,7 @@ export const IMAGE_PATH = {
     banner_3: "/banner-3.png",
     banner_besides_1: "/flash-1.jpg",
     banner_besides_2: "/combo.jpg",
-    no_image: "/no-image-1.jpg"
+    no_image: "/no-image-1.jpg",
+    care: "/care.jpg",
+    size: "/size.jpg"
 }
