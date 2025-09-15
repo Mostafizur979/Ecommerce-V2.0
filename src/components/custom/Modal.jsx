@@ -11,12 +11,12 @@ const style = {
   transform: 'translate(-50%, -50%)',
   bgcolor: 'background.paper',
   borderRadius: "10px",
-  border: "none",   // your border
+  border: "none",   
   boxShadow: 24,
   overflow: "hidden",
-  outline: "none",            // 👈 prevent focus outline
+  outline: "none",           
 };
-export default function CustomModal({ title, children, open, setOpen }) {
+export default function DefaultModal({ children, open, setOpen }) {
   const handleClose = () => setOpen(false);
 
   return (
@@ -27,19 +27,11 @@ export default function CustomModal({ title, children, open, setOpen }) {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-
       <Box
         sx={style}
-        className={`transition-all duration-500 ease-in-out 
-          ${open ? "w-[800px] h-[600px]" : "w-0 h-0"}`}
+        className={`transition-all duration-500 ease-in-out`}
       >
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          {title}
-        </Typography>
-        <Typography id="modal-modal-description">
-         <div className='mt-10'> {children}</div>
-        </Typography>
-
+        {children}
       </Box>
     </Modal>
   );

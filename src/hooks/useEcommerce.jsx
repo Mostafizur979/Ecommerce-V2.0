@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 // Products Hook
 export function useProducts() {
@@ -28,28 +28,31 @@ export function useProducts() {
 
 // Single Product Hook
 export function useProductDetails(id) {
-  const [product, setProduct] = useState([]);
+  const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const fetchProduct = useCallback(async () => {
+    if (!id) return; // prevent calling without id
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product/${id}/`);
+      if (!res.ok) throw new Error("Failed to fetch product");
+      const data = await res.json();
+      setProduct(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [id]);
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product/${id}/`);
-        if (!res.ok) throw new Error("Failed to fetch products");
-        const data = await res.json();
-        setProduct(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+    fetchProduct();
+  }, [fetchProduct]);
 
-    fetchProducts();
-  }, []);
-
-  return { product, loading, error };
+  return { product, loading, error, refetch: fetchProduct };
 }
 
 // Categories Hook
