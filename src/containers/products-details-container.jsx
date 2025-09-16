@@ -16,11 +16,11 @@ export default function ProductDetailsContainer() {
 
     useEffect(() => {
         if (!id) return;
-        refetch(); 
+        refetch();
 
         let recent = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
-        recent = recent.filter(pid => pid !== id); 
-        recent.unshift(id); 
+        recent = recent.filter(pid => pid !== id);
+        recent.unshift(id);
         if (recent.length > 10) recent = recent.slice(0, 10);
         localStorage.setItem("recentlyViewed", JSON.stringify(recent));
 
@@ -32,15 +32,15 @@ export default function ProductDetailsContainer() {
         const recentIds = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
         const recentItems = recentIds
             .map(rid => products.find(p => p?.id == rid))
-            .filter(Boolean); 
+            .filter(Boolean);
         setRecentlyViewed(recentItems);
 
-    }, [products,id]);
+    }, [products, id]);
 
     return (
         <>
             <div className="bg-white">
-                <div className="max-w-[1350px] px-3 2xl:px-0 mx-auto mt-2">
+                <div className="max-w-[1350px] px-3 2xl:px-0 mx-auto">
                     <Breadcrum crums={[
                         { title: <MdHome />, href: "/" },
                         { title: product?.categoryName, href: "/category" },

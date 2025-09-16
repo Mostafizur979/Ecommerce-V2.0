@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Autoplay, FreeMode, Pagination, Thumbs } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -21,7 +21,14 @@ export default function ProductViewSection({ product }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [openSize, setOpenSize] = useState(false);
   const [openCare, setOpenCare] = useState(false);
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedColor, setSelectedColor] = useState(null);
 
+  useEffect(() => {
+    setSelectedColor(null);
+    setSelectedSize(null);
+  }, [product])
+  
   const keyProductData = [
     { key: "Price", value: product?.price - product?.discount },
     { key: "Regular Price", value: product?.price },
@@ -89,7 +96,7 @@ export default function ProductViewSection({ product }) {
           spaceBetween={10}
           slidesPerView={4}
           freeMode={true}
-          
+
           watchSlidesProgress={true}
           modules={[FreeMode, Thumbs]}
           className="my-3"
@@ -135,10 +142,10 @@ export default function ProductViewSection({ product }) {
 
           {/* Variations */}
           <div className="mt-4">
-            <Variation variations={sizes} title={"Sizes"} />
+            <Variation setSelected={setSelectedSize} selected={selectedSize} variations={sizes} title={"Sizes"} />
           </div>
           <div className="mt-4">
-            <Variation variations={colors} title={"Colors"} />
+            <Variation setSelected={setSelectedColor} selected={selectedColor} variations={colors} title={"Colors"} />
           </div>
 
           {/* Size & Care Guide */}
@@ -180,11 +187,18 @@ export default function ProductViewSection({ product }) {
           {/* Buttons */}
           <div className="mt-5">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-              <button className="flex gap-2 items-center justify-center cursor-not-allowed bg-black text-white text-[14px] xl:text-[15px] w-full p-3 rounded-[10px]">
+              <button
+                disabled={!selectedColor && !selectedSize}
+                className={`flex gap-2 items-center justify-center bg-black text-white text-[14px] xl:text-[15px] w-full p-3 rounded-[10px]
+                ${(selectedColor && selectedSize) ? 'cursor-pointer' : 'cursor-not-allowed'}`}>
                 <p>Buy Now</p>
                 <FaAngleRight />
               </button>
-              <button className="flex gap-2 items-center justify-center cursor-not-allowed border border-black text-black hover:bg-black hover:text-white text-[14px] xl:text-[15px] w-full p-3 rounded-[10px]">
+              <button
+                disabled={!selectedColor && !selectedSize}
+                className={`flex gap-2 items-center justify-center border border-black text-black hover:bg-black hover:text-white text-[14px] xl:text-[15px] w-full p-3 rounded-[10px]
+              ${(selectedColor && selectedSize) ? 'cursor-pointer' : 'cursor-not-allowed'}
+              `}>
                 <p>Add To Cart</p>
                 <BsBagPlus />
               </button>

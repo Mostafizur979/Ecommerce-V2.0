@@ -1,6 +1,5 @@
 import { useState } from "react"
-export default function Variation({ title, variations }) {
-    const [selected, setSelected] = useState()
+export default function Variation({ title, variations, setSelected, selected }) {
     return (
         <div>
             <h3 className="text-[16px] xl:text-[18px] text-black font-semibold">{title}</h3>
