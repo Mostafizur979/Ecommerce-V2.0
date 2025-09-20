@@ -9,6 +9,7 @@ import { IMAGE_PATH } from "@/assets"
 import Loader from "@/components/custom/custome-loader"
 import ProductSection from "@/components/common/ProductSection"
 import { useCategories, useProducts } from "@/hooks/useEcommerce"
+import NewArrival from "@/components/home/NewArrival"
 const HeroSectionCardData = [
     { title: "Laptop Finder", description: "Find your laptop easily", icon: <MdLaptopChromebook /> },
     { title: "Raise a Complain", description: "Share your experience", icon: <BiSolidCommentError /> },
@@ -80,6 +81,14 @@ export default function HomepageContainer() {
                             </div>
                         </Link>
                     ))}
+                </div>
+                <div className="mt-16">
+                   {
+                           products ? <NewArrival
+                                products={products}
+                            /> :
+                                <Loader />
+                        }
                 </div>
 
                 <div className="mt-16">

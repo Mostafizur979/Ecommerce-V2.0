@@ -7,7 +7,7 @@ const ProductSection = ({ products, columns=5}) => {
   return (
     <div className='w-full'>
         <div className={`w-full`}>
-          <div className={`w-full pb-4 grid grid-cols-2 gap-3 ${columns==4 ? 'md:grid-cols-3 lg:grid-cols-4' : 'md:grid-cols-4 lg:grid-cols-5'}`}>
+          <div className={`w-full pb-4 grid grid-cols-2 gap-3 ${columns==2 ?'grid-cols-1 lg:grid-cols-2' : columns==4 ? 'md:grid-cols-3 lg:grid-cols-4' : 'md:grid-cols-4 lg:grid-cols-5'}`}>
             {
               products?.map((product, idx) => {
                 return <ProductCard key={idx} data={product}/>
