@@ -82,14 +82,7 @@ export default function HomepageContainer() {
                         </Link>
                     ))}
                 </div>
-                <div className="mt-16">
-                   {
-                           products ? <NewArrival
-                                products={products}
-                            /> :
-                                <Loader />
-                        }
-                </div>
+
 
                 <div className="mt-16">
                     <div>
@@ -97,7 +90,7 @@ export default function HomepageContainer() {
                         <p className="text-[14px] lg:text-[15px] text-[#01132D] text-center">Get Your Desired Product from Featured Category!</p>
                     </div>
                     <div className="grid grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-3 mt-8">
-                        {categories?
+                        {categories ?
                             categories?.map((data, idx) => (
                                 <Link href={{ pathname: "/category", query: { cid: data?.id } }} key={data?.id} className="flex flex-col items-center bg-white rounded-xl shadow-md py-[15px] cursor-pointer">
                                     <div className="p-[15px]">
@@ -121,6 +114,19 @@ export default function HomepageContainer() {
                     </div>
                 </div>
 
+                <div className="mt-16 bg-white border border-gray-600 p-2 relative">
+                    {products ? <NewArrival products={products} /> : <Loader />}
+
+                    {/* Title */}
+                    <div
+                        className="text-[18px] lg:text-[20px] text-black text-center font-semibold absolute -top-5 left-1/2 -translate-x-1/2 
+    z-[10] flex justify-center bg-white px-6 lg:px-12 py-1"
+                    >
+                        <p>New Arrival</p>
+                    </div>
+                </div>
+
+
                 <div className="mt-16">
                     <div>
                         <h2 className="text-[18px] lg:text-[20px] text-black text-center font-semibold">Featured Products</h2>
@@ -128,7 +134,7 @@ export default function HomepageContainer() {
                     </div>
                     <div className="mt-8">
                         {
-                           products ? <ProductSection
+                            products ? <ProductSection
                                 products={products}
                             /> :
                                 <Loader />
