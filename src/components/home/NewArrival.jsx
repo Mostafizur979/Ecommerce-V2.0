@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import SystemProductCard from "../common/SystemProductCard";
 import { FaAnglesLeft, FaAnglesRight } from "react-icons/fa6";
+import ProductCard from "../common/ProductCard";
 export default function NewArrival({ products }) {
     const swiperRef = useRef(null);
 
@@ -24,7 +25,7 @@ export default function NewArrival({ products }) {
             >
                 {products?.map((product, idx) => (
                     <SwiperSlide key={idx}>
-                        <SystemProductCard data={product} />
+                        <ProductCard data={product} />
                     </SwiperSlide>
                 ))}
                 <SwiperSlide>
@@ -37,8 +38,8 @@ export default function NewArrival({ products }) {
             {/* Left Button */}
             <button
                 onClick={() => swiperRef.current?.slidePrev()}
-                className="bg-white py-25 absolute top-1/2 -translate-y-1/2 left-[-30px] 
-                   text-black text-[24px] z-[20] cursor-pointer p-2"
+                className="bg-white py-25 absolute top-1/2 -translate-y-1/2 left-[-25px] lg:left-[-30px] 
+                   text-black text-[20px] xl:text-[24px] z-[20] cursor-pointer p-2"
             >
                 <FaAnglesLeft />
             </button>
@@ -46,8 +47,8 @@ export default function NewArrival({ products }) {
             {/* Right Button */}
             <button
                 onClick={() => swiperRef.current?.slideNext()}
-                className="bg-white py-25 absolute top-1/2 -translate-y-1/2 right-[-30px] 
-                   text-black text-[24px] z-[20] cursor-pointer p-2"
+                className="bg-white py-25 absolute top-1/2 -translate-y-1/2 right-[-25px] lg:right-[-30px] 
+                   text-black text-[20px] xl:text-[24px] z-[20] cursor-pointer p-2"
             >
                 <FaAnglesRight />
             </button>
