@@ -1,7 +1,7 @@
 import { IoFilter } from "react-icons/io5"
 import { TfiLayoutGrid4Alt } from "react-icons/tfi";
 import { TfiLayoutGrid2Alt } from "react-icons/tfi";
-export default function TopBar({setIsTwo}) {
+export default function TopBar({setIsTwo, setSorting, sorting}) {
     return (
         <>
             <div className="grid grid-cols-5 border-y border-gray-200 my-4 bg-white px-4 items-center">
@@ -19,11 +19,10 @@ export default function TopBar({setIsTwo}) {
                 <div className="flex items-center justify-between p-[18px] pr-0 text-[14px] xl:text-[15px] text-black">
                     <p>Sort By:</p>
                     <div>
-                        <select>
-                            <option>New Arrivals</option>
-                            <option>Best Match</option>
-                            <option>Price Low To High</option>
-                            <option>Price Hight To Low</option>
+                        <select onChange={(e)=> {setSorting(e.target.value)}}>
+                            <option value="new">New Arrivals</option>
+                            <option value={true}>Price Low To High</option>
+                            <option value={false}>Price Hight To Low</option>
                         </select>
                     </div>
                 </div>

@@ -10,20 +10,54 @@ import { useProducts, useCategories } from "@/hooks/useEcommerce";
 import ProductSection from "@/components/common/ProductSection";
 import PriceRangeSlider from "@/components/product-filter/PriceRangeSlider";
 import SideBarFilter from "@/components/product-filter/SideBarFilter";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Pagination from "@/components/common/Pagination";
+import Loader from "@/components/custom/custome-loader";
 export default function ProductFilterContainer() {
-    const { products } = useProducts();
     const { categories, loading: categoriesLoading, error: categoriesError } = useCategories();
     const [isTwo, setIsTwo] = useState(false);
     const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(20);
+    const [pageSize, setPageSize] = useState(2);
     const [totalCount, setTotalCount] = useState(1705);
+    const [selectedCategories, setSelectCategories] = useState(null);
+    const [priceRange, setPriceRange] = useState([0,10000]);
+    const [sorting, setSorting] = useState(true);
+    const [products, setProducts] = useState(null);
+    useEffect(() => {
+        const query = new URLSearchParams({
+            categories: JSON.stringify(selectedCategories),
+            priceRange: JSON.stringify({ min: priceRange[0], max: priceRange[1]}),
+            ascending: sorting,
+            page: page,
+            pageSize: pageSize
+        });
+
+        const getFilteredProducts = async () => {
+            try {
+                const res = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/filtered-product/?${query.toString()}`
+                );
+
+                if (!res.ok) {
+                    throw new Error("Failed to fetch products");
+                }
+
+                const data = await res.json();
+                console.log("Filtered products:", data);
+                setProducts(data?.productList);
+                setTotalCount(data?.totalCount);
+                setPage(data?.page);
+                setPageSize(data?.pageSize)
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getFilteredProducts();
+    }, [selectedCategories, priceRange, sorting, page, pageSize]);
 
     const handlePagination = (page, pageSize) => {
-        debugger
-      setPage(page);
-      setPageSize(pageSize)
+        setPage(page);
+        setPageSize(pageSize)
     }
     return (
         <>
@@ -41,15 +75,15 @@ export default function ProductFilterContainer() {
                             className="object-fit"
                         />
                     </div>
-                    <TopBar setIsTwo={setIsTwo} />
+                    <TopBar setIsTwo={setIsTwo} setSorting={setSorting} sorting={sorting} />
 
                     <div className="grid grid-cols-5 gap-3">
                         <div>
                             <div className="bg-white rounded-[5px] shadow-sm">
-                                <PriceRangeSlider />
+                                <PriceRangeSlider setPriceRange={setPriceRange} priceRange={priceRange}/>
                             </div>
                             <div className="bg-white rounded-[5px] shadow-sm mt-2">
-                                <SideBarFilter items={categories} />
+                                <SideBarFilter items={categories}  setSelected={setSelectCategories}/>
                             </div>
                         </div>
                         <div className="col-span-4">
@@ -62,10 +96,10 @@ export default function ProductFilterContainer() {
                             }
                             <div>
                                 <Pagination
-                                  page={page}
-                                  pageSize={pageSize}
-                                  totalCount={totalCount}
-                                  handlePagination={handlePagination}
+                                    page={page}
+                                    pageSize={pageSize}
+                                    totalCount={totalCount}
+                                    handlePagination={handlePagination}
                                 />
                             </div>
                         </div>

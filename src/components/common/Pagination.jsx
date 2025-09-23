@@ -37,6 +37,7 @@ export default function Pagination({ page, pageSize, totalCount, handlePaginatio
     return (
         <div className="flex gap-2 items-center justify-end">
             {/* Prev button */}
+            <div className="text-[14px] xl:text-[15px] mr-4">{totalCount} Items shows in {pages?.length}</div>
             <div
                 className={`h-[35px] w-[35px] flex items-center justify-center text-[15px] border rounded-[5px] cursor-pointer 
                 ${page === 1 ? "opacity-50 cursor-not-allowed" : "border-gray-400"}`}

@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import CustomCheckBox from '../custom/CustomCheckBox';
 
-export default function SideBarFilter({ items }) {
-  const [checked, setChecked] = useState(false);
+export default function SideBarFilter({ items, setSelected }) {
   const [itemList, setItemList] = useState(null);
 
   useEffect(()=>{
@@ -20,7 +19,11 @@ export default function SideBarFilter({ items }) {
   const handleChecked = (value,idx) => {
     const itemsData= [...items];
     itemsData[idx]['isChecked'] = !itemsData[idx]['isChecked'];
-    setItemList(itemsData)
+    setItemList(itemsData);
+
+    const checked = itemsData?.filter(data => data?.isChecked);
+    const checkdIds = checked?.map((data)=>{ return data?.id});
+    setSelected(checkdIds)
   }
 
   return (
