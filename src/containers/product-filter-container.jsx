@@ -13,6 +13,7 @@ import SideBarFilter from "@/components/product-filter/SideBarFilter";
 import { useEffect, useState } from "react";
 import Pagination from "@/components/common/Pagination";
 import Loader from "@/components/custom/custome-loader";
+import CustomDrawer from "@/components/custom/custom-drawer";
 export default function ProductFilterContainer() {
     const { categories, loading: categoriesLoading, error: categoriesError } = useCategories();
     const [isTwo, setIsTwo] = useState(false);
@@ -20,13 +21,15 @@ export default function ProductFilterContainer() {
     const [pageSize, setPageSize] = useState(2);
     const [totalCount, setTotalCount] = useState(1705);
     const [selectedCategories, setSelectCategories] = useState(null);
-    const [priceRange, setPriceRange] = useState([0,10000]);
+    const [priceRange, setPriceRange] = useState([0, 10000]);
     const [sorting, setSorting] = useState(true);
     const [products, setProducts] = useState(null);
+    const [isHideFilter, setIiHideFilter] = useState(false);
+
     useEffect(() => {
         const query = new URLSearchParams({
             categories: JSON.stringify(selectedCategories),
-            priceRange: JSON.stringify({ min: priceRange[0], max: priceRange[1]}),
+            priceRange: JSON.stringify({ min: priceRange[0], max: priceRange[1] }),
             ascending: sorting,
             page: page,
             pageSize: pageSize
@@ -75,21 +78,23 @@ export default function ProductFilterContainer() {
                             className="object-fit"
                         />
                     </div>
-                    <TopBar setIsTwo={setIsTwo} setSorting={setSorting} sorting={sorting} />
+                    <TopBar setIsTwo={setIsTwo} setSorting={setSorting} sorting={sorting} setIsHideFilter={setIiHideFilter} isHideFilter={isHideFilter} />
 
                     <div className="grid grid-cols-5 gap-3">
-                        <div>
-                            <div className="bg-white rounded-[5px] shadow-sm">
-                                <PriceRangeSlider setPriceRange={setPriceRange} priceRange={priceRange}/>
+                        {!isHideFilter &&
+                            <div className="hidden xl:block">
+                                <div className="bg-white rounded-[5px] shadow-sm">
+                                    <PriceRangeSlider setPriceRange={setPriceRange} priceRange={priceRange} />
+                                </div>
+                                <div className="bg-white rounded-[5px] shadow-sm mt-2">
+                                    <SideBarFilter items={categories} setSelected={setSelectCategories} />
+                                </div>
                             </div>
-                            <div className="bg-white rounded-[5px] shadow-sm mt-2">
-                                <SideBarFilter items={categories}  setSelected={setSelectCategories}/>
-                            </div>
-                        </div>
-                        <div className="col-span-4">
+                        }
+                        <div className={`transition-all duration-300 ${isHideFilter ? "col-span-5" : " col-span-5 xl:col-span-4"}`}>
                             {
                                 products ? <ProductSection
-                                    columns={isTwo ? 2 : 4}
+                                    columns={isTwo ? 2 : isHideFilter ? 5 : 4}
                                     products={products}
                                 /> :
                                     <Loader />
@@ -106,9 +111,35 @@ export default function ProductFilterContainer() {
 
                     </div>
 
+
                 </div>
 
             </div>
+            {
+                <div className="block xl:hidden">
+                    <CustomDrawer
+                        title={"Filters"}
+                        isOpen={!isHideFilter}
+                        setIsOpen={setIiHideFilter}
+                    >
+                        <div className="w-full h-full">
+                            <div className="bg-white border-b pb-2 border-gray-300 relative">
+                                <PriceRangeSlider
+                                    setPriceRange={setPriceRange}
+                                    priceRange={priceRange}
+                                />
+                            </div>
+
+                            <div className="bg-white">
+                                <SideBarFilter
+                                    items={categories}
+                                    setSelected={setSelectCategories}
+                                />
+                            </div>
+                        </div>
+                    </CustomDrawer>
+                </div>
+            }
         </>
     )
 }

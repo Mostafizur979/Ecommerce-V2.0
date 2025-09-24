@@ -28,59 +28,72 @@ const offerSliderBreakpoints = {
 };
 
 const Banner = () => {
-
   return (
-    <div className="flex w-full items-center mt-3">
+    <div className="w-full mt-3">
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
         {/* Main Banner */}
         <div className="col-span-1 lg:col-span-3">
           <div className="relative w-full h-[200px] sm:h-[280px] md:h-[350px] lg:h-[488px]">
-            <Swiper
-              spaceBetween={10}
-              slidesPerView={1}
-              modules={[Pagination, FreeMode, Thumbs, Autoplay]}
-              autoplay={{
-                delay: 2500,
-                disableOnInteraction: false,
-              }}
-              pagination={{ clickable: true }}
-              breakpoints={offerSliderBreakpoints}
-              className="w-full h-full"
-            >
-              {demoBannerImages.map((image, idx) => (
-                <SwiperSlide key={idx} className="w-full h-full">
-                  <div className="relative w-full h-full">
-                    <Image
-                      src={image}
-                      alt={`banner-${idx}`}
-                      fill
-                      className="rounded-lg object-fit"
-                      priority
-                    />
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
+            {demoBannerImages?.length > 0 ? (
+              <Swiper
+                spaceBetween={10}
+                slidesPerView={1}
+                modules={[
+                  Pagination,
+                  FreeMode,
+                  Thumbs,
+                  Autoplay,
+                ]}
+                autoplay={{
+                  delay: 2500,
+                  disableOnInteraction: false,
+                }}
+                pagination={{ clickable: true }}
+                breakpoints={offerSliderBreakpoints}
+                className="w-full h-full"
+              >
+                {demoBannerImages
+                  ?.map((item, idx) => (
+                    <SwiperSlide
+                      key={idx}
+                      className="w-full h-full"
+                    >
+                      <div className="relative w-full h-full  ">
+                        <Image
+                          src={item}
+                          fill
+                          alt="Banner"
+                          className="rounded-lg object-fit"
+                        />
+                      </div>
+                    </SwiperSlide>
+                  ))}
+              </Swiper>
+            ) : (
+              <CustomShimmer />
+            )}
           </div>
         </div>
 
-        {/* Side Banners */}
-        <div className="flex flex-col gap-4 w-full">
-          <div className="relative flex-1 min-h-[200px]">
-            <Image
-              src={IMAGE_PATH.banner_besides_1}
-              alt="promo"
-              fill
-              className="object-cover rounded-md"
-            />
+        <div className="grid grid-rows-2 gap-4">
+          <div className="relative w-full min-h-[200px]">
+ 
+              <Image
+                src={IMAGE_PATH.banner_besides_1}
+                fill
+                alt={"banner-1"}
+                className="rounded-lg object-cover "
+              />
+
           </div>
-          <div className="relative flex-1 min-h-[200px]">
-            <Image
-              src={IMAGE_PATH.banner_besides_2}
-              alt="promo"
-              fill
-              className="object-cover rounded-md"
-            />
+          <div className="relative w-full min-h-[200px]">
+              <Image
+                src={IMAGE_PATH.banner_besides_2}
+                fill
+                alt={"banner-2"}
+                className="rounded-lg object-cover "
+              />
+
           </div>
         </div>
       </div>
