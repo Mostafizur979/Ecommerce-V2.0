@@ -10,6 +10,7 @@ import Loader from "@/components/custom/custome-loader"
 import ProductSection from "@/components/common/ProductSection"
 import { useCategories, useProducts } from "@/hooks/useEcommerce"
 import NewArrival from "@/components/home/NewArrival"
+import Cart from "@/components/common/cart"
 const HeroSectionCardData = [
     { title: "Laptop Finder", description: "Find your laptop easily", icon: <MdLaptopChromebook /> },
     { title: "Raise a Complain", description: "Share your experience", icon: <BiSolidCommentError /> },
@@ -175,6 +176,7 @@ export default function HomepageContainer() {
                     }
                 </div>
             </div>
+           
         </>
     )
 }

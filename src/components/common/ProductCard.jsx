@@ -3,10 +3,28 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { IMAGE_PATH } from "@/assets";
 import { FaShoppingCart } from "react-icons/fa";
+import { useCart } from "@/context/CartContext";
+import { toast } from "react-toastify";
 export default function ProductCard({ data }) {
     const router = useRouter();
     const goTo = (id) => {
         router.push(`/product-details?id=${id}`);
+    }
+    const { addToCart, cartItems } = useCart();
+    const handleAddTocart = (data) => {
+        if (cartItems?.find(product => product?.id == data?.id)) {
+            toast.success("Item quantity increased in cart", {
+                autoClose: 2000, 
+            });
+        } else {
+            toast.success("Item successfully added to cart", {
+                autoClose: 2000,
+            });
+        }
+
+
+        addToCart(data)
+
     }
 
     return (
@@ -32,12 +50,12 @@ export default function ProductCard({ data }) {
                             {data?.price}&#x09F3;
                         </p>
                     </div>
-                    <div className="cursor-pointer  text-[#4683a7] rounded-[10px]"><FaShoppingCart size={18} /></div>
+                    <div className="cursor-pointer  text-[#4683a7] rounded-[10px] bg-blue-100 p-2" onClick={() => { handleAddTocart(data) }}><FaShoppingCart size={18} /></div>
                 </div> : <p className="mt-3 text-[14px] text-[#D51E08] font-semibold">Upcoming</p>}
             </div>
             <div className="absolute top-[15px] z-[5]">
                 <p className="py-[1px] px-[10px] bg-[#6E2594] text-[12px] text-white rounded-r-full">
-                    Save: {data?.discount}<span className="text-[10px] font-extrabold">&#x09F3;</span> (-{Math.round((data?.discount/data?.price) * 100)}%)
+                    Save: {data?.discount}<span className="text-[10px] font-extrabold">&#x09F3;</span> (-{Math.round((data?.discount / data?.price) * 100)}%)
                 </p>
             </div>
         </div>

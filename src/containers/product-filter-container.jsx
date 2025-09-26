@@ -25,6 +25,7 @@ export default function ProductFilterContainer() {
     const [sorting, setSorting] = useState(true);
     const [products, setProducts] = useState(null);
     const [isHideFilter, setIiHideFilter] = useState(false);
+    const [isShowMobileFilter, setIsShowMobileFilter] = useState(false);
 
     useEffect(() => {
         const query = new URLSearchParams({
@@ -78,7 +79,15 @@ export default function ProductFilterContainer() {
                             className="object-fit"
                         />
                     </div>
-                    <TopBar setIsTwo={setIsTwo} setSorting={setSorting} sorting={sorting} setIsHideFilter={setIiHideFilter} isHideFilter={isHideFilter} />
+
+                    <TopBar
+                        setIsTwo={setIsTwo}
+                        setSorting={setSorting}
+                        sorting={sorting}
+                        setIsHideFilter={setIiHideFilter}
+                        isHideFilter={isHideFilter}
+                        setIsShowMobileFilter={setIsShowMobileFilter}
+                    />
 
                     <div className="grid grid-cols-5 gap-3">
                         {!isHideFilter &&
@@ -87,7 +96,11 @@ export default function ProductFilterContainer() {
                                     <PriceRangeSlider setPriceRange={setPriceRange} priceRange={priceRange} />
                                 </div>
                                 <div className="bg-white rounded-[5px] shadow-sm mt-2">
-                                    <SideBarFilter items={categories} setSelected={setSelectCategories} />
+                                    <SideBarFilter
+                                        items={categories}
+                                        setSelected={setSelectCategories}
+                                        selected={selectedCategories}
+                                    />
                                 </div>
                             </div>
                         }
@@ -119,8 +132,8 @@ export default function ProductFilterContainer() {
                 <div className="block xl:hidden">
                     <CustomDrawer
                         title={"Filters"}
-                        isOpen={!isHideFilter}
-                        setIsOpen={setIiHideFilter}
+                        isOpen={isShowMobileFilter}
+                        handleClick={() => { setIsShowMobileFilter(false) }}
                     >
                         <div className="w-full h-full">
                             <div className="bg-white border-b pb-2 border-gray-300 relative">
@@ -134,6 +147,7 @@ export default function ProductFilterContainer() {
                                 <SideBarFilter
                                     items={categories}
                                     setSelected={setSelectCategories}
+                                    selected={selectedCategories}
                                 />
                             </div>
                         </div>

@@ -1,15 +1,15 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/common/NavBar";
 import Footer from "@/components/common/Footer";
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import { CartProvider } from "@/context/CartContext";
+import Cart from "@/components/common/cart";
+import { ToastContainer } from "react-toastify";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const poppins = Poppins({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-poppins",
 });
 
 export const metadata = {
@@ -20,19 +20,20 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <div className="relative flex flex-col min-h-screen bg-white " >
-        <div className="flex-grow overflow-y-auto">
-          <NavBar />
-          <div>
-            {children}
+      <body className={`${poppins.variable} antialiased`}>
+        <CartProvider>
+          <div className="relative flex flex-col min-h-screen bg-white">
+            <div className="sticky top-0 z-[100]">
+              <NavBar />
+            </div>
+            <div className="flex-grow overflow-y-auto">
+              <div>{children}</div>
+              <Footer />
+            </div>
+            <Cart />
+            <ToastContainer />
           </div>
-          <Footer />
-        </div>
-        {/* <Cart /> */}
-      </div>
+        </CartProvider>
       </body>
     </html>
   );

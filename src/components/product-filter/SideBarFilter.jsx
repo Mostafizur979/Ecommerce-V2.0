@@ -2,9 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import CustomCheckBox from '../custom/CustomCheckBox';
 
-export default function SideBarFilter({ items, setSelected }) {
+export default function SideBarFilter({ items, setSelected, selected}) {
   const [itemList, setItemList] = useState(null);
-
   useEffect(()=>{
     const data = items?.map((item,idx)=>(
       {
@@ -34,7 +33,7 @@ export default function SideBarFilter({ items, setSelected }) {
           <CustomCheckBox
             label={data?.name}
             name="terms"
-            checked={data?.isChecked}
+            checked={selected?.find(id=>id==data?.id)}
             onChange={(value)=>handleChecked(value,idx)}
             checkboxColor="#dc2626" // red color
             className="my-2"
