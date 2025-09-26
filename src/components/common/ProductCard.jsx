@@ -23,7 +23,7 @@ export default function ProductCard({ data }) {
         }
 
 
-        addToCart(data)
+        addToCart(data,1)
 
     }
 

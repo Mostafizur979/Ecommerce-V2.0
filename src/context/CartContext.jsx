@@ -15,10 +15,10 @@ export const CartProvider = ({ children }) => {
     }
   }, []);
 
-  // Save cart to localStorage whenever it changes
-  useEffect(() => {
+
+  const updateCartItems = () => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  }, [cartItems]);
+  }
 
   // Open / Close drawer
   const openCart = () => setIsCartOpen(true);
@@ -26,24 +26,26 @@ export const CartProvider = ({ children }) => {
   const toggleCart = () => setIsCartOpen((prev) => !prev);
 
   // Add item to cart
-  const addToCart = (product) => {
+  const addToCart = (product, qty) => {
     setCartItems((prev) => {
       const existing = prev.find((item) => item.id === product.id);
       if (existing) {
         return prev.map((item) =>
           item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
+            ? { ...item, quantity: item.quantity + qty }
             : item
         );
       }
-      return [...prev, { ...product, quantity: 1 }];
+      return [...prev, { ...product, quantity: qty }];
     });
+    updateCartItems();
     // openCart(); // Uncomment if you want cart to auto-open when adding
   };
 
   // Remove item completely
   const removeFromCart = (id) => {
     setCartItems((prev) => prev.filter((item) => item.id !== id));
+    updateCartItems();
   };
 
   // Increase quantity
@@ -53,6 +55,7 @@ export const CartProvider = ({ children }) => {
         item.id === id ? { ...item, quantity: item.quantity + 1 } : item
       )
     );
+    updateCartItems();
   };
 
   // Decrease quantity (remove if qty <= 1)
@@ -66,6 +69,7 @@ export const CartProvider = ({ children }) => {
         )
         .filter((item) => item.quantity > 0)
     );
+    updateCartItems();
   };
 
   // Cart total price

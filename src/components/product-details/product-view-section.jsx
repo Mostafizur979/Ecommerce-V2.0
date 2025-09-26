@@ -16,6 +16,26 @@ import { BsRecycle, BsFire, BsBagPlus } from "react-icons/bs";
 import { IoCheckmarkDone } from "react-icons/io5";
 import { FaAngleRight } from "react-icons/fa6";
 import ProductDescription from "../common/ProductDescription";
+import { useCart } from "@/context/CartContext";
+import { toast } from "react-toastify";
+import { FaMinus, FaPlus } from "react-icons/fa";
+
+
+const sizes = [
+  { id: 1, name: 38 },
+  { id: 2, name: 39 },
+  { id: 3, name: 40 },
+  { id: 4, name: 41 },
+  { id: 5, name: 42 },
+  { id: 6, name: 43 },
+];
+
+const colors = [
+  { id: 1, name: "Black" },
+  { id: 2, name: "Red" },
+  { id: 3, name: "Maroon" },
+  { id: 4, name: "White" },
+];
 
 export default function ProductViewSection({ product }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -23,12 +43,13 @@ export default function ProductViewSection({ product }) {
   const [openCare, setOpenCare] = useState(false);
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
-
+  const { addToCart, cartItems } = useCart();
+  const [qty, setQty] = useState(1);
   useEffect(() => {
     setSelectedColor(null);
     setSelectedSize(null);
   }, [product])
-  
+
   const keyProductData = [
     { key: "Price", value: product?.price - product?.discount },
     { key: "Regular Price", value: product?.price },
@@ -38,22 +59,40 @@ export default function ProductViewSection({ product }) {
     { key: "Sub Category", value: product?.subCategoryName },
   ];
 
-  const sizes = [
-    { id: 1, name: 38 },
-    { id: 2, name: 39 },
-    { id: 3, name: 40 },
-    { id: 4, name: 41 },
-    { id: 5, name: 42 },
-    { id: 6, name: 43 },
-  ];
 
-  const colors = [
-    { id: 1, name: "Black" },
-    { id: 2, name: "Red" },
-    { id: 3, name: "Maroon" },
-    { id: 4, name: "White" },
-  ];
+  const handleAddToCart = (product) => {
+    const cartItem = {
+      id: product?.id,
+      categoryId: product?.categoryId,
+      subCategoryId: product?.subCategoryId,
+      name: product?.name,
+      image: product?.image,
+      price: product?.price,
+      discount: product?.discount,
+      unit: product?.unit
+    }
+    if (cartItems?.find(product => product?.id == cartItem?.id)) {
+      toast.success("Item quantity increased in cart", {
+        autoClose: 2000,
+      });
+    } else {
+      toast.success("Item successfully added to cart", {
+        autoClose: 2000,
+      });
+    }
+    addToCart(cartItem, qty)
+  }
 
+  const handleQty = (value) => {
+    if (value < 0) {
+      if (qty > 1) {
+        setQty(prev => prev - 1)
+      }
+    }
+    else {
+      setQty(prev => prev + 1)
+    }
+  }
   return (
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
       {/* Image Section */}
@@ -147,6 +186,30 @@ export default function ProductViewSection({ product }) {
           <div className="mt-4">
             <Variation setSelected={setSelectedColor} selected={selectedColor} variations={colors} title={"Colors"} />
           </div>
+          <div className="mt-4">
+            <h3 className="text-[16px] xl:text-[18px] text-black font-semibold">Quantity</h3>
+            <div className="w-[106px] flex items-center border border-gray-500 rounded-lg mt-2">
+              <button
+                onClick={() =>
+                  handleQty(-1)
+                }
+                className="p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-l-lg transition-colors"
+              >
+                <FaMinus size={12} />
+              </button>
+              <span className="px-4 py-2 text-[13px] xl:text-[14px] font-medium text-gray-900 min-w-[3rem] text-center">
+                {qty}
+              </span>
+              <button
+                onClick={() =>
+                  handleQty(1)
+                }
+                className="p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-r-lg transition-colors"
+              >
+                <FaPlus size={12} />
+              </button>
+            </div>
+          </div>
 
           {/* Size & Care Guide */}
           <div className="mt-5 flex gap-4 flex-wrap">
@@ -196,6 +259,7 @@ export default function ProductViewSection({ product }) {
               </button>
               <button
                 disabled={!selectedColor && !selectedSize}
+                onClick={() => { (selectedColor && selectedSize) ? handleAddToCart(product) : () => { } }}
                 className={`flex gap-2 items-center justify-center border border-black text-black hover:bg-black hover:text-white text-[14px] xl:text-[15px] w-full p-3 rounded-[10px]
               ${(selectedColor && selectedSize) ? 'cursor-pointer' : 'cursor-not-allowed'}
               `}>
